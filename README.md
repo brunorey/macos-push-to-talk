@@ -13,5 +13,6 @@ Run with sudo and keep the console open in background.
 
 Press right "option" key to talk, release to mute.
 
-## Disclaimer
+### Disclaimer
+
 Tested only on my mac (macbook pro early 2019, mojave 10.14.6), so no guarantees that it'll work on any other device. At the moment, it's built only for my needs. Hopefully that'll improve over time.
