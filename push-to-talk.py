@@ -8,6 +8,9 @@ from sys import exit
 
 class PushToTalk():
     push_to_talk_button = 'alt_r'
+    # When the mic is open, other programs may change the volume # dynamically
+    # in an effort to avoid distortion or do some normalization.
+    # Remember the volume that was set by this program and restore to that value.
     last_volume = 75
 
     def handler(self, signal_received, frame):
