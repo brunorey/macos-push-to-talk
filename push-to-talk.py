@@ -62,7 +62,7 @@ if ptt.prompt_sudo() != 0:
 ptt.hush_mic()
 
 listener = keyboard.Listener(on_press=ptt.on_press, on_release=ptt.on_release)
-print("Press and hold '" + ptt.push_to_talk_button + "' to talk...")
+print("Your mic is now muted. Press and hold '" + ptt.push_to_talk_button + "' to talk...")
 listener.start()  # start to listen on a separate thread
 listener.join()  # remove if main thread is polling self.keys
 
