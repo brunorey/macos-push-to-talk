@@ -2,10 +2,20 @@
 from pynput import keyboard
 import osascript
 import os, subprocess
+from signal import signal, SIGINT
+from sys import exit
+
 
 class PushToTalk():
     push_to_talk_button = 'alt_r'
     last_volume = 75
+
+    def handler(self, signal_received, frame):
+        print('SIGINT or CTRL-C detected. Terminating...')
+        print('Setting volume to normal level (mic open)...')
+        self.open_mic()
+        print('Done. Bye!')
+        exit(0)
 
     def prompt_sudo(self):
         ret = 0
@@ -17,7 +27,7 @@ class PushToTalk():
     def on_press(self, key):
         try:
             if key and key.name and key.name == self.push_to_talk_button:
-                osascript.osascript("set volume input volume " + last_volume)
+                self.open_mic()
         except:
             pass
 
@@ -25,14 +35,31 @@ class PushToTalk():
         try:
             if key and key.name and key.name == self.push_to_talk_button:
                 self.last_volume = osascript.osascript("input volume of (get volume settings)")[1]
-                osascript.osascript("set volume input volume 0")
+                self.hush_mic()
         except:
             pass
 
+    def open_mic(self):
+        try:
+            osascript.osascript("set volume input volume " + str(self.last_volume))
+        except:
+            pass
+
+    def hush_mic(self):
+        try:
+            osascript.osascript("set volume input volume 0")
+        except:
+            pass
+
+
 ptt = PushToTalk()
+
+signal(SIGINT, ptt.handler)
 
 if ptt.prompt_sudo() != 0:
     print("Failed to get root privileges. Exiting.")
+
+ptt.hush_mic()
 
 listener = keyboard.Listener(on_press=ptt.on_press, on_release=ptt.on_release)
 print("Press and hold '" + ptt.push_to_talk_button + "' to talk...")
